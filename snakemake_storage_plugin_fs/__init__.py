@@ -1,5 +1,3 @@
-import asyncio
-from dataclasses import dataclass, field
 import os
 from pathlib import Path
 import shutil
@@ -7,7 +5,6 @@ from typing import Any, Iterable, Optional
 
 import sysrsync
 
-from snakemake_interface_storage_plugins.settings import StorageProviderSettingsBase
 from snakemake_interface_storage_plugins.storage_provider import (
     StorageProviderBase,
     StorageQueryValidationResult,
@@ -16,7 +13,6 @@ from snakemake_interface_storage_plugins.storage_object import (
     StorageObjectRead,
     StorageObjectWrite,
     StorageObjectGlob,
-    retry_decorator,
 )
 from snakemake_interface_storage_plugins.io import (
     IOCacheStorageInterface,
@@ -60,7 +56,7 @@ class StorageProvider(StorageProviderBase):
         if query.is_dir():
             return map(str, Path(query).rglob("*"))
         elif query.exists():
-            return query,
+            return (query,)
         else:
             return ()
 
@@ -91,6 +87,11 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         # If this is implemented in a storage object, results have to be stored in
         # the given IOCache object.
         key = self.cache_key()
+
+        if key in cache.exists_in_storage:
+            # already inventorized, stop here
+            return
+
         try:
             stat = self._stat()
         except FileNotFoundError:
@@ -167,7 +168,7 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         if prefix.is_dir():
             return map(str, prefix.rglob("*"))
         else:
-            return prefix,
+            return (prefix,)
 
     def _stat(self, follow_symlinks: bool = True):
         # We don't want the cached variant (Path.stat), as we cache ourselves in

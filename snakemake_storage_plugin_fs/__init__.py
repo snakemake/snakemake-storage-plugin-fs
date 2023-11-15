@@ -1,12 +1,16 @@
 import os
 from pathlib import Path
 import shutil
+import subprocess
 from typing import Any, Iterable, Optional
 
 import sysrsync
 
+from snakemake_interface_common.exceptions import WorkflowError
 from snakemake_interface_storage_plugins.storage_provider import (
     StorageProviderBase,
+    ExampleQuery,
+    Operation,
     StorageQueryValidationResult,
 )
 from snakemake_interface_storage_plugins.storage_object import (
@@ -35,6 +39,32 @@ class StorageProvider(StorageProviderBase):
         # Alternatively, you can e.g. prepare a connection to your storage backend here.
         # and set additional attributes.
         pass
+
+    @classmethod
+    def example_query(cls) -> ExampleQuery:
+        """Return an example query with description for this storage provider."""
+        return ExampleQuery(
+            query="test/test.txt",
+            description="Some file or directory path.",
+        )
+
+    def rate_limiter_key(self, query: str, operation: Operation) -> Any:
+        """Return a key for identifying a rate limiter given a query and an operation.
+
+        This is used to identify a rate limiter for the query.
+        E.g. for a storage provider like http that would be the host name.
+        For s3 it might be just the endpoint URL.
+        """
+        ...
+
+    def default_max_requests_per_second(self) -> float:
+        """Return the default maximum number of requests per second for this storage
+        provider."""
+        ...
+
+    def use_rate_limiter(self) -> bool:
+        """Return False if no rate limiting is needed for this provider."""
+        return False
 
     @classmethod
     def is_valid_query(cls, query: str) -> StorageQueryValidationResult:
@@ -122,7 +152,7 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
             suffix = f"__abspath__/{suffix[1:]}"
         return self.query.removeprefix("/")
 
-    def close(self):
+    def cleanup(self):
         # Nothing to be done here.
         pass
 
@@ -143,22 +173,33 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
 
     def retrieve_object(self):
         # Ensure that the object is accessible locally under self.local_path()
-        sysrsync.run(
-            self.query_path,
-            self.local_path(),
+        cmd = sysrsync.get_rsync_command(
+            str(self.query_path), str(self.local_path()), options=["-av"]
         )
+        self._run_cmd(cmd)
 
     def store_object(self):
         # Ensure that the object is stored at the location specified by
         # self.local_path().
-        sysrsync.run(
-            self.local_path(),
-            self.query_path,
+        cmd = sysrsync.get_rsync_command(
+            str(self.local_path()), str(self.query_path), options=["-av"]
         )
+        self._run_cmd(cmd)
+
+    def _run_cmd(self, cmd: list[str]):
+        try:
+            subprocess.run(
+                cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
+            )
+        except subprocess.CalledProcessError as e:
+            raise WorkflowError(e.stdout.decode())
 
     def remove(self):
         # Remove the object from the storage.
-        shutil.rmtree(self.query_path)
+        if self.query_path.is_dir():
+            shutil.rmtree(self.query_path)
+        else:
+            self.query_path.unlink()
 
     def list_candidate_matches(self) -> Iterable[str]:
         """Return a list of candidate matches in the storage for the query."""

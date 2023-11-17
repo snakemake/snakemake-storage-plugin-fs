@@ -190,6 +190,7 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
     def store_object(self):
         # Ensure that the object is stored at the location specified by
         # self.local_path().
+        self.query_path.parent.mkdir(exist_ok=True, parents=True)
         cmd = sysrsync.get_rsync_command(
             str(self.local_path()), str(self.query_path), options=["-av"]
         )

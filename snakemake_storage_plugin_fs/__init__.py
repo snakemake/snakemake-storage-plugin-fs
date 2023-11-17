@@ -134,6 +134,7 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
             stat = self._stat()
         except FileNotFoundError:
             cache.exists_in_storage[key] = False
+            return
         if self.query_path.is_symlink():
             # get symlink stat
             lstat = self._stat(follow_symlinks=False)
@@ -150,7 +151,7 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         if parent == Path("."):
             return None
         else:
-            return parent
+            return str(parent)
 
     def local_suffix(self) -> str:
         """Return a unique suffix for the local path, determined from self.query."""

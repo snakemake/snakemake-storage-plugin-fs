@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.0...v0.1.1) (2023-11-17)
+
+
+### Bug Fixes
+
+* fixed query validation ([04aba41](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/04aba41f4ec858cae4692de3eb8f36077a7ee4f7))
+
 ## 0.1.0 (2023-11-15)
 
 

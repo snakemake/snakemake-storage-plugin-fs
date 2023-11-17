@@ -75,7 +75,15 @@ class StorageProvider(StorageProviderBase):
         try:
             Path(query)
         except Exception:
-            return False
+            return StorageQueryValidationResult(
+                query=query,
+                valid=False,
+                message="Query is not a valid path.",
+            )
+        return StorageQueryValidationResult(
+            query=query,
+            valid=True,
+        )
 
     def list_objects(self, query: Any) -> Iterable[str]:
         """Return an iterator over all objects in the storage that match the query.

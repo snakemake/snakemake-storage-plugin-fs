@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.1...v0.1.2) (2023-11-20)
+
+
+### Bug Fixes
+
+* create directory if not yet existing ([e8d959f](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/e8d959faeea27face12dcb785679cfc7fa45595d))
+* fix inventory ([25e56ba](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/25e56ba4b4b5edf44c7838915b3b6ea6f2c95bb8))
+
 ## [0.1.1](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.0...v0.1.1) (2023-11-17)
 
 

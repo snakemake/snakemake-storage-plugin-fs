@@ -21,6 +21,7 @@ from snakemake_interface_storage_plugins.storage_object import (
 from snakemake_interface_storage_plugins.io import (
     IOCacheStorageInterface,
     get_constant_prefix,
+    Mtime,
 )
 
 
@@ -142,7 +143,7 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
             lstat = self._stat(follow_symlinks=False)
         else:
             lstat = stat
-        cache.mtime[key] = lstat.st_mtime
+        cache.mtime[key] = Mtime(storage=lstat.st_mtime)
         cache.size[key] = stat.st_size
         cache.exists_in_storage[key] = True
 

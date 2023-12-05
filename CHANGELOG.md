@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.2...v0.1.3) (2023-12-05)
+
+
+### Bug Fixes
+
+* adapt to interface change ([6b1bee0](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/6b1bee0174f8157a85751fe4ce405890168f474e))
+
 ## [0.1.2](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.1...v0.1.2) (2023-11-20)
 
 

@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
-from typing import Any, Iterable, Optional
+from typing import Any, Iterable, List, Optional
 
 import sysrsync
 
@@ -41,12 +41,14 @@ class StorageProvider(StorageProviderBase):
         pass
 
     @classmethod
-    def example_query(cls) -> ExampleQuery:
+    def example_queries(cls) -> List[ExampleQuery]:
         """Return an example query with description for this storage provider."""
-        return ExampleQuery(
-            query="test/test.txt",
-            description="Some file or directory path.",
-        )
+        return [
+            ExampleQuery(
+                query="test/test.txt",
+                description="Some file or directory path.",
+            )
+        ]
 
     def rate_limiter_key(self, query: str, operation: Operation) -> Any:
         """Return a key for identifying a rate limiter given a query and an operation.

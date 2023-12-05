@@ -12,6 +12,7 @@ from snakemake_interface_storage_plugins.storage_provider import (
     ExampleQuery,
     Operation,
     StorageQueryValidationResult,
+    QueryType,
 )
 from snakemake_interface_storage_plugins.storage_object import (
     StorageObjectRead,
@@ -47,6 +48,7 @@ class StorageProvider(StorageProviderBase):
         return [
             ExampleQuery(
                 query="test/test.txt",
+                type=QueryType.ANY,
                 description="Some file or directory path.",
             )
         ]

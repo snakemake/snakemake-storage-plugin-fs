@@ -5,6 +5,8 @@ description = " A Snakemake storage plugin that reads and writes from a locally 
 authors = ["Johannes Koester <johannes.koester@uni-due.de>"]
 readme = "README.md"
 repository = "https://github.com/snakemake/snakemake-storage-plugin-fs"
+documentation = "https://snakemake.github.io/snakemake-plugin-catalog/plugins/storage/fs.html"
+keywords = ["snakemake", "plugin", "storage", "filesystem", "rsync"]
 
 [tool.poetry.dependencies]
 python = "^3.11"

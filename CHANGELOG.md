@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.3...v0.1.4) (2023-12-08)
+
+
+### Documentation
+
+* refactor docs ([aeeee93](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/aeeee9331ae1910e8c4d0a1d76d835043fbfb9f5))
+
 ## [0.1.3](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.2...v0.1.3) (2023-12-05)
 
 

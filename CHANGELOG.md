@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.5](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.4...v0.1.5) (2023-12-20)
+
+
+### Documentation
+
+* add license to metadata ([ac8cc98](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/ac8cc9893590f59d45d2f9b3bbd1660dd5f9fd55))
+* update metadata ([9a66b33](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/9a66b3341fdbd58aa1211da2f8f0de0cd0057b4c))
+
 ## [0.1.4](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.3...v0.1.4) (2023-12-08)
 
 

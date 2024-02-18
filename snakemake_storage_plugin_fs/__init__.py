@@ -29,6 +29,7 @@ from snakemake_interface_storage_plugins.io import (
     get_constant_prefix,
     Mtime,
 )
+from snakemake_interface_storage_plugins.settings import StorageProviderSettingsBase
 
 
 @dataclass

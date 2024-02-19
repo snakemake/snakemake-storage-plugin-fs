@@ -1,3 +1,4 @@
+from dataclasses import dataclass, field
 import os
 from pathlib import Path
 import shutil
@@ -18,12 +19,27 @@ from snakemake_interface_storage_plugins.storage_object import (
     StorageObjectRead,
     StorageObjectWrite,
     StorageObjectGlob,
+    StorageObjectTouch,
 )
 from snakemake_interface_storage_plugins.io import (
     IOCacheStorageInterface,
     get_constant_prefix,
     Mtime,
 )
+from snakemake_interface_storage_plugins.settings import StorageProviderSettingsBase
+from snakemake_interface_common.utils import lutime
+
+
+@dataclass
+class StorageProviderSettings(StorageProviderSettingsBase):
+    latency_wait: int = field(
+        default=1,
+        metadata={
+            "help": "Time in seconds to wait until retry if file operation is not "
+            "successfull. This is useful to deal with filesystem latency as it can "
+            "occur with network filesystems. Default is 1 second.",
+        },
+    )
 
 
 # Required:
@@ -109,7 +125,9 @@ class StorageProvider(StorageProviderBase):
 # storage (e.g. because it is read-only see
 # snakemake-storage-http for comparison), remove the corresponding base classes
 # from the list of inherited items.
-class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
+class StorageObject(
+    StorageObjectRead, StorageObjectWrite, StorageObjectGlob, StorageObjectTouch
+):
     # For compatibility with future changes, you should not overwrite the __init__
     # method. Instead, use __post_init__ to set additional attributes and initialize
     # futher stuff.
@@ -230,3 +248,6 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         # We don't want the cached variant (Path.stat), as we cache ourselves in
         # inventory and afterwards the information may change.
         return os.stat(self.query_path, follow_symlinks=follow_symlinks)
+
+    def touch(self):
+        lutime(str(self.query_path))

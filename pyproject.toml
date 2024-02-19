@@ -11,8 +11,8 @@ keywords = ["snakemake", "plugin", "storage", "filesystem", "rsync"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-snakemake-interface-common = "^1.14.2"
-snakemake-interface-storage-plugins = "^3.0.0"
+snakemake-interface-common = "^1.17.0"
+snakemake-interface-storage-plugins = "^3.1.0"
 sysrsync = "^1.1.1"
 
 

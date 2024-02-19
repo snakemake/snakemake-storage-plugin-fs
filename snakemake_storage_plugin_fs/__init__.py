@@ -257,6 +257,6 @@ class StorageObject(
                 if not flag.exists():
                     with open(flag, "w"):
                         pass
-                lutime(flag)
+                lutime(flag, None)
             else:
-                lutime(str(self.query_path))
+                lutime(str(self.query_path), None)

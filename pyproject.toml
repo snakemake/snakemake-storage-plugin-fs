@@ -14,6 +14,7 @@ python = "^3.11"
 snakemake-interface-common = "^1.17.0"
 snakemake-interface-storage-plugins = "^3.1.0"
 sysrsync = "^1.1.1"
+reretry = "^0.11.8"
 
 
 [tool.poetry.group.dev.dependencies]

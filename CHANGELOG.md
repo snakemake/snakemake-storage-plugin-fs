@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.5...v0.2.0) (2024-02-19)
+
+
+### Features
+
+* add touch support ([#9](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/9)) ([7ed5a6a](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/7ed5a6a5a6d4208124f946ae9269e72ab0d9e509))
+* provide setting for latency wait ([#8](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/8)) ([9ac5c8d](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/9ac5c8ddc89d6a35c36dc991bdc24f1965f42a16))
+
 ## [0.1.5](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.4...v0.1.5) (2023-12-20)
 
 

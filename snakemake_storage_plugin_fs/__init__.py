@@ -250,4 +250,13 @@ class StorageObject(
         return os.stat(self.query_path, follow_symlinks=follow_symlinks)
 
     def touch(self):
-        lutime(str(self.query_path))
+        if self.query_path.exists():
+            if self.query_path.is_dir():
+                flag = self.query_path / ".snakemake_timestamp"
+                # Create the flag file if it doesn't exist
+                if not flag.exists():
+                    with open(flag, "w"):
+                        pass
+                lutime(flag)
+            else:
+                lutime(str(self.query_path))

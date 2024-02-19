@@ -10,6 +10,7 @@ from snakemake_storage_plugin_fs import StorageProvider, StorageProviderSettings
 class TestStorageNoSettings(TestStorageBase):
     __test__ = True
     retrieve_only = False
+    touch = True
 
     def get_query(self, tmp_path) -> str:
         parent = f"{tmp_path}/storage/test/"

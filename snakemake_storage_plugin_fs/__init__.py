@@ -23,6 +23,7 @@ from snakemake_interface_storage_plugins.storage_object import (
     StorageObjectRead,
     StorageObjectWrite,
     StorageObjectGlob,
+    StorageObjectTouch,
 )
 from snakemake_interface_storage_plugins.io import (
     IOCacheStorageInterface,
@@ -30,6 +31,7 @@ from snakemake_interface_storage_plugins.io import (
     Mtime,
 )
 from snakemake_interface_storage_plugins.settings import StorageProviderSettingsBase
+from snakemake_interface_common.utils import lutime
 
 
 @dataclass
@@ -137,7 +139,9 @@ def latency_wait(f):
 # storage (e.g. because it is read-only see
 # snakemake-storage-http for comparison), remove the corresponding base classes
 # from the list of inherited items.
-class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
+class StorageObject(
+    StorageObjectRead, StorageObjectWrite, StorageObjectGlob, StorageObjectTouch
+):
     # For compatibility with future changes, you should not overwrite the __init__
     # method. Instead, use __post_init__ to set additional attributes and initialize
     # futher stuff.
@@ -262,3 +266,15 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         # We don't want the cached variant (Path.stat), as we cache ourselves in
         # inventory and afterwards the information may change.
         return os.stat(self.query_path, follow_symlinks=follow_symlinks)
+
+    def touch(self):
+        if self.query_path.exists():
+            if self.query_path.is_dir():
+                flag = self.query_path / ".snakemake_timestamp"
+                # Create the flag file if it doesn't exist
+                if not flag.exists():
+                    with open(flag, "w"):
+                        pass
+                lutime(flag, None)
+            else:
+                lutime(str(self.query_path), None)

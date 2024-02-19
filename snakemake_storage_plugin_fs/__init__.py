@@ -127,7 +127,7 @@ def latency_wait(f):
     def wrapper(self, *args, **kwargs):
         return retry(
             tries=2, delay=self.provider.settings.latency_wait, logger=get_logger()
-        )(f)
+        )(f)(self, *args, **kwargs)
 
     return wrapper
 

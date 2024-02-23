@@ -36,7 +36,7 @@ from snakemake_interface_common.utils import lutime
 
 @dataclass
 class StorageProviderSettings(StorageProviderSettingsBase):
-    latency_wait: int = field(
+    latency_wait: Optional[int] = field(
         default=1,
         metadata={
             "help": "Time in seconds to wait until retry if file operation is not "
@@ -231,8 +231,11 @@ class StorageObject(
         # Ensure that the object is stored at the location specified by
         # self.local_path().
         self.query_path.parent.mkdir(exist_ok=True, parents=True)
+        # We want to respect the permissions in the target folder, in particular the 
+        # setgid bit. Hence, we use --no-p to avoid preserving of permissions from the
+        # source to the target.
         cmd = sysrsync.get_rsync_command(
-            str(self.local_path()), str(self.query_path), options=["-av"]
+            str(self.local_path()), str(self.query_path), options=["-av", "--no-p"]
         )
         self._run_cmd(cmd)
 

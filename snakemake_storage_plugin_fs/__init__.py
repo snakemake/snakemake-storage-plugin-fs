@@ -231,7 +231,7 @@ class StorageObject(
         # Ensure that the object is stored at the location specified by
         # self.local_path().
         self.query_path.parent.mkdir(exist_ok=True, parents=True)
-        # We want to respect the permissions in the target folder, in particular the 
+        # We want to respect the permissions in the target folder, in particular the
         # setgid bit. Hence, we use --no-p to avoid preserving of permissions from the
         # source to the target.
         cmd = sysrsync.get_rsync_command(

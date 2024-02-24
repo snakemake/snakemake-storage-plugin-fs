@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.0](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.2.0...v1.0.0) (2024-02-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* remove latency wait support as this should rather be handled in main Snakemake (as it is already done). The reason is that the plugin cannot distinguish between cases where latency has to be taken into accound and where not, leading to overall much slower processing when latency wait is applied regardless of the context. This introduces a breaking change because this plugin now does not offer any settings anymore. ([#13](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/13))
+
+### Bug Fixes
+
+* remove latency wait support as this should rather be handled in main Snakemake (as it is already done). The reason is that the plugin cannot distinguish between cases where latency has to be taken into accound and where not, leading to overall much slower processing when latency wait is applied regardless of the context. This introduces a breaking change because this plugin now does not offer any settings anymore. ([#13](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/13)) ([1c78d88](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/1c78d880925ad1af08195d4035028a9117755551))
+* respect permissions of the target dir, especially setgid ([#11](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/11)) ([2132a5a](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/2132a5a845f865fd076235620f8e2a91a2300206))
+
 ## [0.2.0](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.1.5...v0.2.0) (2024-02-19)
 
 

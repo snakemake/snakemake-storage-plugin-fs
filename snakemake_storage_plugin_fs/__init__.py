@@ -1,16 +1,11 @@
-from dataclasses import dataclass, field
-from functools import wraps
 import os
 from pathlib import Path
 import shutil
 import subprocess
-import time
 from typing import Any, Iterable, List, Optional
 
 import sysrsync
-from reretry import retry
 
-from snakemake_interface_common.logging import get_logger
 from snakemake_interface_common.exceptions import WorkflowError
 from snakemake_interface_storage_plugins.storage_provider import (
     StorageProviderBase,
@@ -30,20 +25,7 @@ from snakemake_interface_storage_plugins.io import (
     get_constant_prefix,
     Mtime,
 )
-from snakemake_interface_storage_plugins.settings import StorageProviderSettingsBase
 from snakemake_interface_common.utils import lutime
-
-
-@dataclass
-class StorageProviderSettings(StorageProviderSettingsBase):
-    latency_wait: Optional[int] = field(
-        default=1,
-        metadata={
-            "help": "Time in seconds to wait until retry if file operation is not "
-            "successfull. This is useful to deal with filesystem latency as it can "
-            "occur with network filesystems. Default is 1 second.",
-        },
-    )
 
 
 # Required:
@@ -124,16 +106,6 @@ class StorageProvider(StorageProviderBase):
             return ()
 
 
-def latency_wait(f):
-    @wraps(f)
-    def wrapper(self, *args, **kwargs):
-        return retry(
-            tries=2, delay=self.provider.settings.latency_wait, logger=get_logger()
-        )(f)(self, *args, **kwargs)
-
-    return wrapper
-
-
 # Required:
 # Implementation of storage object. If certain methods cannot be supported by your
 # storage (e.g. because it is read-only see
@@ -204,13 +176,7 @@ class StorageObject(
 
     def exists(self) -> bool:
         # return True if the object exists
-        exists = self.query_path.exists()
-        if not exists and self.provider.settings.latency_wait:
-            # Retry once
-            time.sleep(self.provider.settings.latency_wait)
-            return self.query_path.exists()
-        else:
-            return exists
+        return self.query_path.exists()
 
     def mtime(self) -> float:
         # return the modification time
@@ -264,7 +230,6 @@ class StorageObject(
         else:
             return (prefix,)
 
-    @latency_wait
     def _stat(self, follow_symlinks: bool = True):
         # We don't want the cached variant (Path.stat), as we cache ourselves in
         # inventory and afterwards the information may change.

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.0...v1.0.1) (2024-04-16)
+
+
+### Bug Fixes
+
+* do not consider URL-like queries as valid ([bb0cd39](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/bb0cd390ac288600f61ed4fb7236b8dc2bfdbc03))
+
 ## [1.0.0](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v0.2.0...v1.0.0) (2024-02-24)
 
 

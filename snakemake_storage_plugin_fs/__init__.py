@@ -3,6 +3,7 @@ from pathlib import Path
 import shutil
 import subprocess
 from typing import Any, Iterable, List, Optional
+from urllib.parse import urlparse
 
 import sysrsync
 
@@ -79,6 +80,16 @@ class StorageProvider(StorageProviderBase):
         # Ensure that also queries containing wildcards (e.g. {sample}) are accepted
         # and considered valid. The wildcards will be resolved before the storage
         # object is actually used.
+
+        # disallow queries that are URL like
+        parsed = urlparse(query)
+        if parsed.scheme:
+            return StorageQueryValidationResult(
+                query=query,
+                valid=False,
+                message="Query is URL-like, but should be a system path instead.",
+            )
+
         try:
             Path(query)
         except Exception:

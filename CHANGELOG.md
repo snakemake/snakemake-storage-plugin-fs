@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.1...v1.0.2) (2024-04-16)
+
+
+### Miscellaneous Chores
+
+* release 1.0.2 ([173ce62](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/173ce62626d49f17fb99fc94519ec981339ffc1e))
+
 ## [1.0.1](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.0...v1.0.1) (2024-04-16)
 
 

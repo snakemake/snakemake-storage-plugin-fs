@@ -87,7 +87,7 @@ class StorageProvider(StorageProviderBase):
             return StorageQueryValidationResult(
                 query=query,
                 valid=False,
-                message="Query is URL-like, but should be a system path instead.",
+                reason="Query is URL-like, but should be a system path instead.",
             )
 
         try:
@@ -96,7 +96,7 @@ class StorageProvider(StorageProviderBase):
             return StorageQueryValidationResult(
                 query=query,
                 valid=False,
-                message="Query is not a valid path.",
+                reason="Query is not a valid path.",
             )
         return StorageQueryValidationResult(
             query=query,

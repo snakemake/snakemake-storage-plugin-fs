@@ -3,6 +3,7 @@ from pathlib import Path
 import shutil
 import subprocess
 from typing import Any, Iterable, List, Optional
+from urllib.parse import urlparse
 
 import sysrsync
 
@@ -18,12 +19,14 @@ from snakemake_interface_storage_plugins.storage_object import (
     StorageObjectRead,
     StorageObjectWrite,
     StorageObjectGlob,
+    StorageObjectTouch,
 )
 from snakemake_interface_storage_plugins.io import (
     IOCacheStorageInterface,
     get_constant_prefix,
     Mtime,
 )
+from snakemake_interface_common.utils import lutime
 
 
 # Required:
@@ -77,13 +80,23 @@ class StorageProvider(StorageProviderBase):
         # Ensure that also queries containing wildcards (e.g. {sample}) are accepted
         # and considered valid. The wildcards will be resolved before the storage
         # object is actually used.
+
+        # disallow queries that are URL like
+        parsed = urlparse(query)
+        if parsed.scheme:
+            return StorageQueryValidationResult(
+                query=query,
+                valid=False,
+                reason="Query is URL-like, but should be a system path instead.",
+            )
+
         try:
             Path(query)
         except Exception:
             return StorageQueryValidationResult(
                 query=query,
                 valid=False,
-                message="Query is not a valid path.",
+                reason="Query is not a valid path.",
             )
         return StorageQueryValidationResult(
             query=query,
@@ -109,7 +122,9 @@ class StorageProvider(StorageProviderBase):
 # storage (e.g. because it is read-only see
 # snakemake-storage-http for comparison), remove the corresponding base classes
 # from the list of inherited items.
-class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
+class StorageObject(
+    StorageObjectRead, StorageObjectWrite, StorageObjectGlob, StorageObjectTouch
+):
     # For compatibility with future changes, you should not overwrite the __init__
     # method. Instead, use __post_init__ to set additional attributes and initialize
     # futher stuff.
@@ -135,11 +150,11 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
             # already inventorized, stop here
             return
 
-        try:
-            stat = self._stat()
-        except FileNotFoundError:
+        if not self.exists():
             cache.exists_in_storage[key] = False
             return
+
+        stat = self._stat()
         if self.query_path.is_symlink():
             # get symlink stat
             lstat = self._stat(follow_symlinks=False)
@@ -170,9 +185,6 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         # Nothing to be done here.
         pass
 
-    # Fallible methods should implement some retry logic.
-    # The easiest way to do this (but not the only one) is to use the retry_decorator
-    # provided by snakemake-interface-storage-plugins.
     def exists(self) -> bool:
         # return True if the object exists
         return self.query_path.exists()
@@ -196,6 +208,9 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         # Ensure that the object is stored at the location specified by
         # self.local_path().
         self.query_path.parent.mkdir(exist_ok=True, parents=True)
+        # We want to respect the permissions in the target folder, in particular the
+        # setgid bit. Hence, we use --no-p to avoid preserving of permissions from the
+        # source to the target.
         cmd = sysrsync.get_rsync_command(
             str(self.local_path()),
             str(self.query_path),
@@ -234,3 +249,15 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         # We don't want the cached variant (Path.stat), as we cache ourselves in
         # inventory and afterwards the information may change.
         return os.stat(self.query_path, follow_symlinks=follow_symlinks)
+
+    def touch(self):
+        if self.query_path.exists():
+            if self.query_path.is_dir():
+                flag = self.query_path / ".snakemake_timestamp"
+                # Create the flag file if it doesn't exist
+                if not flag.exists():
+                    with open(flag, "w"):
+                        pass
+                lutime(flag, None)
+            else:
+                lutime(str(self.query_path), None)

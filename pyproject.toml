@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "snakemake-storage-plugin-fs"
-version = "0.1.5"
+version = "1.0.3"
 description = " A Snakemake storage plugin that reads and writes from a locally mounted filesystem using rsync"
 authors = ["Johannes Koester <johannes.koester@uni-due.de>"]
 readme = "README.md"
@@ -11,9 +11,10 @@ keywords = ["snakemake", "plugin", "storage", "filesystem", "rsync"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-snakemake-interface-common = "^1.14.2"
-snakemake-interface-storage-plugins = "^3.0.0"
+snakemake-interface-common = "^1.17.0"
+snakemake-interface-storage-plugins = "^3.2.2"
 sysrsync = "^1.1.1"
+reretry = "^0.11.8"
 
 
 [tool.poetry.group.dev.dependencies]

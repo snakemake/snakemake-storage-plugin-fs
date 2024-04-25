@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.3...v1.0.4) (2024-04-25)
+
+
+### Bug Fixes
+
+* inherit ownership and permissions from "remote"/destination dir ([289a739](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/289a73974b60cf5b6d02c1bc50894e7bc8521478))
+
 ## [1.0.3](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.2...v1.0.3) (2024-04-17)
 
 

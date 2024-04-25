@@ -197,7 +197,11 @@ class StorageObject(StorageObjectRead, StorageObjectWrite, StorageObjectGlob):
         # self.local_path().
         self.query_path.parent.mkdir(exist_ok=True, parents=True)
         cmd = sysrsync.get_rsync_command(
-            str(self.local_path()), str(self.query_path), options=["-av"]
+            str(self.local_path()),
+            str(self.query_path),
+            # ensure that permissions and ownership are inherited from destination,
+            # e.g. setgid.
+            options=["-av", "--no-o", "--no-g", "--no-p"],
         )
         self._run_cmd(cmd)
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.4...v1.0.5) (2024-07-04)
+
+
+### Bug Fixes
+
+* fix touch and retrieval of mtime for directories ([#20](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/20)) ([898d367](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/898d367ddff01282ab0808a66e7d5fe086272b2e))
+
 ## [1.0.4](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.3...v1.0.4) (2024-04-25)
 
 

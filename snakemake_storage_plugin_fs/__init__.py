@@ -160,7 +160,7 @@ class StorageObject(
             lstat = self._stat(follow_symlinks=False)
         else:
             lstat = stat
-        cache.mtime[key] = Mtime(storage=lstat.st_mtime)
+        cache.mtime[key] = Mtime(storage=self._stat_to_mtime(lstat))
         cache.size[key] = stat.st_size
         cache.exists_in_storage[key] = True
 
@@ -191,7 +191,7 @@ class StorageObject(
 
     def mtime(self) -> float:
         # return the modification time
-        return self._stat(follow_symlinks=False).st_mtime
+        return self._stat_to_mtime(self._stat(follow_symlinks=False))
 
     def size(self) -> int:
         # return the size in bytes
@@ -253,11 +253,23 @@ class StorageObject(
     def touch(self):
         if self.query_path.exists():
             if self.query_path.is_dir():
-                flag = self.query_path / ".snakemake_timestamp"
-                # Create the flag file if it doesn't exist
-                if not flag.exists():
-                    with open(flag, "w"):
+                timestamp = self._timestamp_path
+                # Create the timestamp file if it doesn't exist
+                if not timestamp.exists():
+                    with open(timestamp, "w"):
                         pass
-                lutime(flag, None)
+                lutime(timestamp, None)
             else:
                 lutime(str(self.query_path), None)
+
+    @property
+    def _timestamp_path(self):
+        return self.query_path / ".snakemake_timestamp"
+
+    def _stat_to_mtime(self, stat):
+        if self.query_path.is_dir():
+            # use the timestamp file if possible
+            timestamp = self._timestamp_path
+            if timestamp.exists():
+                return os.stat(timestamp, follow_symlinks=False).st_mtime
+        return stat.st_mtime

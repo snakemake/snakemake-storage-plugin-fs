@@ -208,6 +208,11 @@ class StorageObject(
         # Ensure that the object is stored at the location specified by
         # self.local_path().
         self.query_path.parent.mkdir(exist_ok=True, parents=True)
+        # Clean up the target path
+        if self.local_path().is_dir():
+            shutil.rmtree(self.query_path, ignore_errors=True)
+        else:
+            self.query_path.unlink(missing_ok=True)
         # We want to respect the permissions in the target folder, in particular the
         # setgid bit. Hence, we use --no-p to avoid preserving of permissions from the
         # source to the target.

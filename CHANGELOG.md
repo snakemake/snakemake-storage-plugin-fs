@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.5...v1.0.6) (2024-08-16)
+
+
+### Bug Fixes
+
+* clean up target path upon storage in order to avoid merges of directories ([#25](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/25)) ([5a9bd27](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/5a9bd27a40377b0cadfc51fd576ae98c9ee06668))
+
 ## [1.0.5](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.4...v1.0.5) (2024-07-04)
 
 

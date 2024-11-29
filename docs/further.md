@@ -23,13 +23,15 @@ If the shared scratch is e.g. specific for each job (e.g. controlled by a ``$JOB
 ```yaml
 default-storage-provider: fs
 local-storage-prefix: /local/work/$USER
-remote-job-local-storage-prefix: /local/work/$USER/$JOBID
+remote-job-local-storage-prefix: /local/work/$USER/\$JOBID
 shared-fs-usage:
   - persistence
   - software-deployment
   - sources
   - source-cache
 ```
+
+Here, in case a used variable can only expanded within the remote job, make sure to mask the expansion upon starting Snakemake by preceeding the variable declaration with a backslash (``\$JOBID``).
 
 Note that the non-remote job local storage prefix is still always needed, because Snakemake can also decide to run certain jobs without submission to the cluster or cloud.
 This can happen either on dev request because a certain rule is very lightweight, or by Snakemake's own decision, e.g. in case of rules that just format a template (see `docs <https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#template-rendering-integration>`_).

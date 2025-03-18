@@ -27,6 +27,7 @@ from snakemake_interface_storage_plugins.io import (
     Mtime,
 )
 from snakemake_interface_common.utils import lutime
+from snakemake_storage_plugin_fs.utils import get_query_size
 
 
 # Required:
@@ -38,12 +39,6 @@ class StorageProvider(StorageProviderBase):
     # For compatibility with future changes, you should not overwrite the __init__
     # method. Instead, use __post_init__ to set additional attributes and initialize
     # futher stuff.
-
-    def __post_init__(self):
-        # This is optional and can be removed if not needed.
-        # Alternatively, you can e.g. prepare a connection to your storage backend here.
-        # and set additional attributes.
-        pass
 
     @classmethod
     def example_queries(cls) -> List[ExampleQuery]:
@@ -196,6 +191,10 @@ class StorageObject(
     def size(self) -> int:
         # return the size in bytes
         return self._stat().st_size
+
+    def local_footprint(self) -> int:
+        # return the local footprint in bytes
+        return get_query_size(self.query_path)
 
     def retrieve_object(self):
         # Ensure that the object is accessible locally under self.local_path()

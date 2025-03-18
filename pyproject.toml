@@ -16,7 +16,6 @@ snakemake-interface-storage-plugins = "^3.2.2"
 sysrsync = "^1.1.1"
 reretry = "^0.11.8"
 
-
 [tool.poetry.group.dev.dependencies]
 black = "^23.11.0"
 flake8 = "^6.1.0"

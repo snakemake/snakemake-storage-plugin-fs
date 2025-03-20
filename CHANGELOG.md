@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.6...v1.1.0) (2025-03-20)
+
+
+### Features
+
+* on demand retrieval (via symlinking) in case input is annotated as on-demand eligible by Snakemake (e.g. because of sequential access being annotated by the developer ([#32](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/32)) ([e69267c](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/e69267c52dcac00f801881c5c9578b04ca93180e))
+
+
+### Bug Fixes
+
+* adapt to interface	version	4.0 ([fc6f499](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/fc6f499658bd8e459acf7f21a01acd9f0bbfebf6))
+* proper use of relpath to define symlink ([2295f7f](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/2295f7fdcbebaef9ae523fcca3a0bf6dcd356eb7))
+
 ## [1.0.6](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.5...v1.0.6) (2024-08-16)
 
 

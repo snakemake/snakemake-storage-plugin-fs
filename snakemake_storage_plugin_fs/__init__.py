@@ -204,7 +204,9 @@ class StorageObject(
                 f"Creating symlink for on-demand retrieval of {self.query_path}."
             )
             os.symlink(
-                self.query_path,
+                # we have to use os.path.relpath here because Path.relative_to
+                # does not allow usage of paths that are in different directories.
+                os.path.relpath(self.query_path, self.local_path().parent),
                 self.local_path(),
                 target_is_directory=self.query_path.is_dir(),
             )

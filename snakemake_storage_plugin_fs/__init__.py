@@ -199,10 +199,20 @@ class StorageObject(
 
     def retrieve_object(self):
         # Ensure that the object is accessible locally under self.local_path()
-        cmd = sysrsync.get_rsync_command(
-            str(self.query_path), str(self.local_path()), options=["-av"]
-        )
-        self._run_cmd(cmd)
+        if self.is_ondemand_eligible:
+            self.provider.logger.info(
+                f"Creating symlink for on-demand retrieval of {self.query_path}."
+            )
+            os.symlink(
+                self.query_path,
+                self.local_path(),
+                target_is_directory=self.query_path.is_dir(),
+            )
+        else:
+            cmd = sysrsync.get_rsync_command(
+                str(self.query_path), str(self.local_path()), options=["-av"]
+            )
+            self._run_cmd(cmd)
 
     def store_object(self):
         # Ensure that the object is stored at the location specified by

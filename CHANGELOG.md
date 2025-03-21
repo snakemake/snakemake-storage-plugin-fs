@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.1.0...v1.1.1) (2025-03-21)
+
+
+### Bug Fixes
+
+* trying to clarify usage of remotly used env vars ([#30](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/30)) ([ef89d0e](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/ef89d0e1bf8eab95cc07b2cfb0c7959a8b96cbc6))
+
 ## [1.1.0](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.0.6...v1.1.0) (2025-03-20)
 
 

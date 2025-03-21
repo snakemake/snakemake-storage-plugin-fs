@@ -18,12 +18,12 @@ shared-fs-usage:
   - source-cache
 ```
 
-If the shared scratch is e.g. specific for each job (e.g. controlled by a ``$JOBID``), one can define a job-specific local storage prefix like this
+If the shared scratch is e.g. specific for each job (e.g. controlled by a ``$JOBID``). Environment variables defined only on remote instances might need to be escaped (with a `\`) to prevent premature evaluation. One can define a job-specific local storage prefix like this
 
 ```yaml
 default-storage-provider: fs
 local-storage-prefix: /local/work/$USER
-remote-job-local-storage-prefix: /local/work/$USER/$JOBID
+remote-job-local-storage-prefix: /local/work/$USER/\$JOBID
 shared-fs-usage:
   - persistence
   - software-deployment

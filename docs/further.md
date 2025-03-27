@@ -18,18 +18,21 @@ shared-fs-usage:
   - source-cache
 ```
 
-If the shared scratch is e.g. specific for each job (e.g. controlled by a ``$JOBID``). Environment variables defined only on remote instances might need to be escaped (with a `\`) to prevent premature evaluation. One can define a job-specific local storage prefix like this
+If the shared scratch is e.g. specific for each job (e.g. controlled by a ``$JOBID``) one can define a job-specific local storage prefix like this
 
 ```yaml
 default-storage-provider: fs
 local-storage-prefix: /local/work/$USER
-remote-job-local-storage-prefix: /local/work/$USER/\$JOBID
+remote-job-local-storage-prefix: /local/work/$USER/$JOBID
 shared-fs-usage:
   - persistence
   - software-deployment
   - sources
   - source-cache
 ```
+
+Note that when using ``snakemake-interface-executor-plugins<9.3.4``, the variable ``$JOBID`` has to be escaped as ``\$JOBID`` because of a bug.
+The bug is fixed in ``snakemake-interface-executor-plugins>=9.3.4``. We recommend an update.
 
 Note that the non-remote job local storage prefix is still always needed, because Snakemake can also decide to run certain jobs without submission to the cluster or cloud.
 This can happen either on dev request because a certain rule is very lightweight, or by Snakemake's own decision, e.g. in case of rules that just format a template (see `docs <https://snakemake.readthedocs.io/en/stable/snakefiles/rules.html#template-rendering-integration>`_).

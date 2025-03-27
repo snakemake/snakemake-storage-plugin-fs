@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.1.1...v1.1.2) (2025-03-27)
+
+
+### Documentation
+
+* update prefix setting description ([6971446](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/6971446cc0336ed9779a408afeb6969fb0c505c1))
+
 ## [1.1.1](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.1.0...v1.1.1) (2025-03-21)
 
 

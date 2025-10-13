@@ -213,7 +213,7 @@ class StorageObject(
         else:
             cmd = sysrsync.get_rsync_command(
                 str(self.query_path),
-                str(self.local_path()), 
+                str(self.local_path()),
                 options=["-av", "--no-o", "--no-g", "--no-p"],
             )
             self._run_cmd(cmd)

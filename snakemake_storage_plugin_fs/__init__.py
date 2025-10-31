@@ -227,10 +227,7 @@ class StorageObject(
                 str(self.local_path()),
                 options=[
                     "--recursive",
-                    "--perms",
                     "--times",
-                    "--group",
-                    "--owner",
                     "--copy-links",
                 ],
             )

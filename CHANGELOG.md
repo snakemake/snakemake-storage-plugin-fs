@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.1.2...v1.1.3) (2025-10-31)
+
+
+### Bug Fixes
+
+* be more explicit about rsync args and ensure that symlinks are copied (avoiding that they point to non-existing files); to not copy permissions and ownership (thanks [@landerini](https://github.com/landerini)) ([#38](https://github.com/snakemake/snakemake-storage-plugin-fs/issues/38)) ([505d868](https://github.com/snakemake/snakemake-storage-plugin-fs/commit/505d868ce10ada945167bad03db66e33d7becbfa))
+
 ## [1.1.2](https://github.com/snakemake/snakemake-storage-plugin-fs/compare/v1.1.1...v1.1.2) (2025-03-27)
 
 

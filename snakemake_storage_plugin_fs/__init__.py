@@ -197,6 +197,17 @@ class StorageObject(
         # return the size in bytes
         return self._stat().st_size
 
+    def local_footprint(self) -> int:
+        if self.is_ondemand_eligible:
+            # If the object is not downloaded, we don't have to count it.
+            return 0
+        if self.query_path.is_dir():
+            # If the object is a directory, we have to count all files in it.
+            return sum(
+                f.stat().st_size for f in self.query_path.rglob("*") if f.is_file()
+            )
+        return self.size()
+
     def retrieve_object(self):
         # Ensure that the object is accessible locally under self.local_path()
         if self.is_ondemand_eligible:
@@ -212,7 +223,16 @@ class StorageObject(
             )
         else:
             cmd = sysrsync.get_rsync_command(
-                str(self.query_path), str(self.local_path()), options=["-av"]
+                str(self.query_path),
+                str(self.local_path()),
+                options=[
+                    "--recursive",
+                    "--perms",
+                    "--times",
+                    "--group",
+                    "--owner",
+                    "--copy-links",
+                ],
             )
             self._run_cmd(cmd)
 
@@ -235,7 +255,11 @@ class StorageObject(
             str(self.query_path),
             # ensure that permissions and ownership are inherited from destination,
             # e.g. setgid.
-            options=["-av", "--no-o", "--no-g", "--no-p"],
+            options=[
+                "--recursive",
+                "--times",
+                "--copy-links",
+            ],
         )
         self._run_cmd(cmd)
 
